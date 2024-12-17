@@ -1,0 +1,10 @@
+openstack_provider_config = {
+  auth_url = "http://myauthurl:5000/v3"
+  tenant_name = "<PROJECT_NAME>"
+  user_name = "<YOUR_USERNAME>"
+  password = "<YOUR_PASSWORD>"
+  region = "regionOne"
+  insecure = false
+}
+
+your_ssh_key_pair_name = "mfernandez-ssh"
