@@ -1,0 +1,77 @@
+heat_template_version: 2013-05-23
+
+description: >
+  A basic HEAT template.
+
+parameters:
+  compute_image_name:
+    type: string
+    description: Name of the compute image
+    default: "Debian-12"
+  compute_flavor_name:
+    type: string
+    description: Name of the compute flavor
+    default: "m1.small"
+  your_ssh_key_pair_name:
+    type: string
+    description: Name of your SSH key pair
+  external_network_name:
+    type: string
+    description: Name of the external network
+    default: "public"
+  internal_network_name:
+    type: string
+    description: Name of the internal network
+    default: "default"
+
+resources:
+  # Instance
+  myinstance:
+    type: OS::Nova::Server
+    properties:
+      name: myinstance
+      image: { get_param: compute_image_name }
+      flavor: { get_param: compute_flavor_name }
+      key_name: { get_param: your_ssh_key_pair_name }
+      networks:
+        - port: { get_resource: myinstance_port }
+
+  # Volume
+  myvol:
+    type: OS::Cinder::Volume
+    properties:
+      name: myvol
+      size: 6
+
+  # Attach Volume to Instance
+  attached:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: myinstance }
+      volume_id: { get_resource: myvol }
+
+  # Port
+  myinstance_port:
+    type: OS::Neutron::Port
+    properties:
+      security_groups:
+        - common
+      network: { get_param: internal_network_name }
+
+  # Floating IP
+  floatip_1:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: { get_param: external_network_name }
+
+  # Associate Floating IP
+  public_ip:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: floatip_1 }
+      port_id: { get_resource: myinstance_port }
+
+outputs:
+  floating_ip_address:
+    description: Floating IP address assigned to the instance
+    value: { get_attr: [floatip_1, floating_ip_address] }

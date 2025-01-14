@@ -1,0 +1,2 @@
+parameters:
+  your_ssh_key_pair_name: "CHANGEME"

@@ -42,10 +42,29 @@ $ tofu init
 
 $ cp terraform.tfvars.dist terraform.tfvars
 
-$ tofu apply -var-file .tfvars
+$ tofu apply
 ```
 
 > [!NOTE]
 > You can remove the variable [`openstack_provider_config`](./02_terraform_tofu/variables.tf), and instead use the argument `cloud` in your [openstack provider config](./02_terraform_tofu/providers.tf) to use your current Openstack environment.
 >
 > But personally, I prefer to specify the environment each time.
+
+## 03. Heat Templates
+
+Simple compute instance accessible through SSH after its creation.
+
+See it in the [`03_heat/`](./03_heat/) directory.
+
+```sh
+cd 03_heat/
+
+openstack stack create mystack --template main.yaml --environment params.yaml
+```
+
+> [!TIP]
+> To use the `stack` commands, you need to have installed the heat plugin for the openstack CLI:
+>
+> With APT: `sudo apt install python3-heatclient`
+> 
+> With pip: `pipx python-heatclient`
