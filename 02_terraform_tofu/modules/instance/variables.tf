@@ -10,20 +10,24 @@ variable "compute_flavor_name" {
   default     = "m1.small"
 }
 
-variable "your_ssh_key_pair_name" {
-  description = "The name of your previously created key pair"
-  type        = string
-  sensitive   = true
-}
-
 variable "external_network_name" {
   description = "External network name"
   type        = string
   default     = "public"
 }
 
-variable "internal_network_name" {
-  description = "Internal network name"
+variable "internal_network_id" {
+  description = "Internal network id (required)"
   type        = string
-  default     = "default"
+}
+
+variable "secgroup_name" {
+  description = "Secgroup id (required)"
+  type        = string
+}
+
+variable "your_ssh_key_pair_name" {
+  description = "The name of your previously created key pair"
+  type        = string
+  sensitive   = true
 }
