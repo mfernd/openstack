@@ -3,7 +3,7 @@
 
 provider "registry.opentofu.org/terraform-provider-openstack/openstack" {
   version     = "3.0.0"
-  constraints = "~> 3.0.0"
+  constraints = "3.0.0"
   hashes = [
     "h1:sxq+0vFl4SfV9dlut5liwaH4FejyNIf4ClAjRgowxv8=",
     "zh:01718f229597b34ed430236a230a407dacd6289543556d33910e151462e8cb8a",
