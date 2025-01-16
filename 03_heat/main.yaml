@@ -1,4 +1,4 @@
-heat_template_version: 2013-05-23
+heat_template_version: 2021-04-16
 
 description: >
   A basic HEAT template.
@@ -33,30 +33,10 @@ resources:
       image: { get_param: compute_image_name }
       flavor: { get_param: compute_flavor_name }
       key_name: { get_param: your_ssh_key_pair_name }
-      networks:
-        - port: { get_resource: myinstance_port }
-
-  # Volume
-  myvol:
-    type: OS::Cinder::Volume
-    properties:
-      name: myvol
-      size: 6
-
-  # Attach Volume to Instance
-  attached:
-    type: OS::Cinder::VolumeAttachment
-    properties:
-      instance_uuid: { get_resource: myinstance }
-      volume_id: { get_resource: myvol }
-
-  # Port
-  myinstance_port:
-    type: OS::Neutron::Port
-    properties:
       security_groups:
         - common
-      network: { get_param: internal_network_name }
+      networks:
+        - network: { get_param: internal_network_name }
 
   # Floating IP
   floatip_1:
@@ -69,7 +49,7 @@ resources:
     type: OS::Neutron::FloatingIPAssociation
     properties:
       floatingip_id: { get_resource: floatip_1 }
-      port_id: { get_resource: myinstance_port }
+      port_id: { get_attr: [myinstance, addresses, { get_param: internal_network_name }, 0, port] }
 
 outputs:
   floating_ip_address:

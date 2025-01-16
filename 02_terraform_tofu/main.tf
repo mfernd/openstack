@@ -12,21 +12,6 @@ resource "openstack_compute_instance_v2" "myinstance" {
   }
 }
 
-data "openstack_networking_port_v2" "myinstance-port" {
-  fixed_ip = openstack_compute_instance_v2.myinstance.access_ip_v4
-}
-
-## volumes
-resource "openstack_compute_volume_attach_v2" "attached" {
-  instance_id = openstack_compute_instance_v2.myinstance.id
-  volume_id   = openstack_blockstorage_volume_v3.myvol.id
-}
-
-resource "openstack_blockstorage_volume_v3" "myvol" {
-  name = "myvol"
-  size = 6 # in gigabytes
-}
-
 ## create floating ip
 resource "openstack_networking_floatingip_v2" "floatip_1" {
   pool = data.openstack_networking_network_v2.ext_network.name
@@ -68,4 +53,10 @@ data "openstack_networking_network_v2" "int_network" {
 ## Fetch Security Group
 data "openstack_networking_secgroup_v2" "common_secgroup" {
   name = "common"
+}
+
+## Get port of created instance
+data "openstack_networking_port_v2" "myinstance-port" {
+  device_id  = openstack_compute_instance_v2.myinstance.id
+  network_id = data.openstack_networking_network_v2.int_network.id
 }

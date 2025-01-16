@@ -4,12 +4,14 @@ Small examples to experiment with Openstack.
 
 ## Plan
 
-1. [Openstack on CLI](#01-openstack-on-cli), creating a simple compute instance
-2. [Terraform / Tofu](#02-terraform--tofu), creating a simple compute instance with a SSH access
-3. Openstack with HEAT yaml...
-4. Small project with `openstack LB` ➡️ `Front 1 | Front 2` ➡️ `Back`
+1. [Openstack on CLI](#openstack-on-cli), creating a simple compute instance
+2. [Simple compute instance with a SSH access](#simple-compute-instance-with-a-ssh-access)
+   1. [Terraform / Tofu](#terraform--tofu)
+   2. [HEAT Templates](#heat-templates)
+3. Small project with `openstack LB` ➡️ `Front 1 | Front 2` ➡️ `Back`
 
-## 01. Openstack on CLI
+
+## Openstack on CLI
 
 Requirements:
 
@@ -27,7 +29,9 @@ $ openstack server create --flavor m1.small --image Debian-12 \
 
 You can replace the flavor and image with what you want to use.
 
-## 02. Terraform / Tofu
+## Simple compute instance with a SSH access
+
+### Terraform / Tofu
 
 Simple compute instance accessible through SSH after its creation.
 
@@ -50,7 +54,7 @@ $ tofu apply
 >
 > But personally, I prefer to specify the environment each time.
 
-## 03. Heat Templates
+### Heat Templates
 
 Simple compute instance accessible through SSH after its creation.
 
