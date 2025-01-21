@@ -9,7 +9,7 @@ resource "openstack_networking_network_v2" "network" {
 resource "openstack_networking_subnet_v2" "subnet" {
   name       = var.name
   network_id = openstack_networking_network_v2.network.id
-  cidr       = "192.168.0.0/24"
+  cidr       = var.cidr
   ip_version = 4
 }
 

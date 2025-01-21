@@ -81,8 +81,8 @@ See it in the [`project/`](./project/) directory.
 Goals:
 - Deploy the infrastructure with Terraform
 - Install Kubernetes on cloud-init (Ansible needed?)
-- USe Flux to deploy the application
+- Use Flux to deploy the application
 
-For now, network topology (maybe the names will change for k8s nodes):
+For now, network topology:
 
 ![Network topology](./project/data/project_network_topology.png)
