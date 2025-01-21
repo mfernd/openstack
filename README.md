@@ -8,7 +8,8 @@ Small examples to experiment with Openstack.
 2. [Simple compute instance with a SSH access](#simple-compute-instance-with-a-ssh-access)
    1. [Terraform / Tofu](#terraform--tofu)
    2. [HEAT Templates](#heat-templates)
-3. Small project with `openstack LB` ➡️ `Front 1 | Front 2` ➡️ `Back`
+3. [Final project](#final-project)
+   With `openstack LB` ➡️ `Front 1 | Front 2` ➡️ `Back` (or Kubernetes)
 
 
 ## Openstack on CLI
@@ -72,3 +73,16 @@ openstack stack create mystack --template main.yaml --environment params.yaml
 > With APT: `sudo apt install python3-heatclient`
 > 
 > With pip: `pipx python-heatclient`
+
+## Final project
+
+See it in the [`project/`](./project/) directory.
+
+Goals:
+- Deploy the infrastructure with Terraform
+- Install Kubernetes on cloud-init (Ansible needed?)
+- USe Flux to deploy the application
+
+For now, network topology (maybe the names will change for k8s nodes):
+
+![Network topology](./project/data/project_network_topology.png)

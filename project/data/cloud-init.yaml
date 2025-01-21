@@ -1,0 +1,12 @@
+#cloud-config
+
+package_update: true
+package_upgrade: true
+
+runcmd:
+  - apt-get update
+  - apt-get upgrade -y
+  - apt-get install -y ansible
+  - echo "[web]" >> /etc/ansible/hosts
+  - echo "localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python3" >> /etc/ansible/hosts
+  - export GIT_SSL_NO_VERIFY=true ; ansible-pull -o -d /usr/local/ansible -U https://github.com/mfernd/openstack.git
