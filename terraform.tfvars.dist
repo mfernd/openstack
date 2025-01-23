@@ -7,4 +7,4 @@ openstack_provider_config = {
   insecure = false
 }
 
-your_ssh_key_pair_name = "mfernandez-ssh"
+your_ssh_key_pair_name = "<YOUR_SSH_KEY_PAIR_NAME>"

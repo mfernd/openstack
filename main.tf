@@ -30,7 +30,7 @@ module "controller" {
     module.internal_net.id,
   ]
   secgroups              = [module.ssh_secgroup.name]
-  cloudinit_config       = file("${path.module}/data/cloud-init.yaml")
+  cloudinit_config       = file("${path.module}/assets/cloud-init.yaml")
   your_ssh_key_pair_name = var.your_ssh_key_pair_name
   is_public              = true
 }
@@ -42,7 +42,7 @@ module "nodes" {
   instance_name          = "node${count.index}"
   networks               = [module.internal_net.id]
   secgroups              = [module.ssh_secgroup.name]
-  cloudinit_config       = file("${path.module}/data/cloud-init.yaml")
+  cloudinit_config       = file("${path.module}/assets/cloud-init.yaml")
   your_ssh_key_pair_name = var.your_ssh_key_pair_name
 }
 

@@ -1,14 +1,13 @@
 on:
   workflow_call:
   push:
+    branches:
+      - main
 
 jobs:
   check_format:
     runs-on: ubuntu-latest
     name: Check OpenTofu file are formatted correctly
-    strategy:
-      matrix:
-        path: [02_terraform_tofu, project]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -16,15 +15,10 @@ jobs:
       - name: tofu fmt
         uses: dflook/tofu-fmt-check@v1
         id: fmt-check
-        with:
-          path: ${{ matrix.path }}
 
   validate:
     runs-on: ubuntu-latest
     name: Validate OpenTofu module
-    strategy:
-      matrix:
-        path: [02_terraform_tofu, project]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,5 +26,3 @@ jobs:
       - name: tofu validate
         uses: dflook/tofu-validate@v1
         id: validate
-        with:
-          path: ${{ matrix.path }}
