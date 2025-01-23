@@ -10,16 +10,6 @@ variable "networks" {
   type        = list(string)
 }
 
-variable "secgroups" {
-  description = "List of secgroup names"
-  type        = list(string)
-}
-
-variable "cloudinit_config" {
-  description = "Content to put in the user_data cloud init"
-  type        = string
-}
-
 variable "your_ssh_key_pair_name" {
   description = "The name of your previously created key pair"
   type        = string
@@ -27,6 +17,18 @@ variable "your_ssh_key_pair_name" {
 }
 
 // # Optional
+
+variable "secgroups" {
+  description = "List of secgroup names"
+  type        = list(string)
+  default     = []
+}
+
+variable "cloudinit_config" {
+  description = "Content to put in the user_data cloud init"
+  type        = string
+  nullable    = true
+}
 
 variable "is_public" {
   description = "Content to put in the user_data cloud init"

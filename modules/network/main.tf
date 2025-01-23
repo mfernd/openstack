@@ -5,12 +5,12 @@ resource "openstack_networking_network_v2" "network" {
   admin_state_up = "true"
 }
 
-
 resource "openstack_networking_subnet_v2" "subnet" {
-  name       = var.name
-  network_id = openstack_networking_network_v2.network.id
-  cidr       = var.cidr
-  ip_version = 4
+  name            = var.name
+  network_id      = openstack_networking_network_v2.network.id
+  cidr            = var.cidr
+  ip_version      = 4
+  dns_nameservers = ["8.8.8.8"]
 }
 
 # if var.is_public
