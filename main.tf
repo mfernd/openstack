@@ -37,15 +37,15 @@ module "secgroup0" {
 module "controller" {
   source = "./modules/instance"
 
-  instance_name = "controller"
-  networks = [
-    module.public_net.id,
-    module.internal_net.id,
-  ]
+  instance_name          = "controller"
+  compute_flavor_name    = "m1.medium"
+  networks               = [module.public_net.id, module.internal_net.id]
   secgroups              = [module.secgroup0.name]
-  cloudinit_config       = file("${path.module}/assets/cloud-init-server-node.yaml")
-  your_ssh_key_pair_name = var.your_ssh_key_pair_name
   is_public              = true
+  your_ssh_key_pair_name = var.your_ssh_key_pair_name
+  cloudinit_config = templatefile("${path.module}/assets/cloud-init.tftpl", {
+    playbook_name = "ansible/rke2_controller.yaml",
+  })
 }
 
 # OUTPUTS
