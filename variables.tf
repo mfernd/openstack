@@ -16,3 +16,9 @@ variable "your_ssh_key_pair_name" {
   type        = string
   sensitive   = true
 }
+
+variable "rke2_token" {
+  description = "Kubernetes RKE2 token"
+  type        = string
+  default     = "test"
+}

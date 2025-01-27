@@ -8,10 +8,11 @@ packages:
   - ca-certificates
 
 write_files:
-  - content: "cloud init executed"
+  - path: /etc/rancher/rke2/config.yaml
     owner: root:root
-    path: /provided.txt
-    permissions: "0644"
+    permissions: '0644'
+    content: |
+      token: "${token}"
 
 ansible:
   package_name: ansible-core

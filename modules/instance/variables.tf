@@ -39,7 +39,7 @@ variable "is_public" {
 variable "compute_image_name" {
   description = "Compute instance image name"
   type        = string
-  default     = "Debian-12"
+  default     = "Ubuntu-24.10"
 }
 
 variable "compute_flavor_name" {

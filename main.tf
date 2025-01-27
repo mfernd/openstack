@@ -45,6 +45,7 @@ module "controller" {
   your_ssh_key_pair_name = var.your_ssh_key_pair_name
   cloudinit_config = templatefile("${path.module}/assets/cloud-init.tftpl", {
     playbook_name = "ansible/rke2_controller.yaml",
+    token         = var.rke2_token
   })
 }
 

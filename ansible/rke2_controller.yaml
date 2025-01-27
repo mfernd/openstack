@@ -32,7 +32,7 @@
       ansible.builtin.file:
         path: /home/ubuntu/.kube
         state: directory
-        mode: '0664'
+        mode: '0700'
         owner: ubuntu
         group: ubuntu
 
@@ -42,5 +42,3 @@
         dest: /home/ubuntu/.kube/config
         state: link
         force: true
-        owner: ubuntu
-        group: ubuntu
