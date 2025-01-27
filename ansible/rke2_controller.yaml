@@ -1,6 +1,7 @@
 ---
 - name: Install and start rke2
   hosts: localhost
+  become: true
   tasks:
     - name: Download rke2 installation script
       ansible.builtin.get_url:
@@ -12,18 +13,34 @@
       ansible.builtin.shell:
         cmd: |
           INSTALL_RKE2_CHANNEL=latest /tmp/install_rke2.sh
-      become: true
       changed_when: true
-
-    - name: Create symlink for kubectl
-      ansible.builtin.file:
-        src: /var/lib/rancher/rke2/bin/kubectl
-        dest: /usr/local/bin/kubectl
-        state: link
 
     - name: Start the rke2-server service
       ansible.builtin.service:
         name: rke2-server
         enabled: true
         state: started
-      become: true
+
+    - name: Create symlink for kubectl
+      ansible.builtin.file:
+        src: /var/lib/rancher/rke2/bin/kubectl
+        dest: /usr/local/bin/kubectl
+        state: link
+        force: true
+
+    - name: Create .kube/ folder
+      ansible.builtin.file:
+        path: /home/ubuntu/.kube
+        state: directory
+        mode: '0664'
+        owner: ubuntu
+        group: ubuntu
+
+    - name: Create symlink for kubeconfig
+      ansible.builtin.file:
+        src: /etc/rancher/rke2/rke2.yaml
+        dest: /home/ubuntu/.kube/config
+        state: link
+        force: true
+        owner: ubuntu
+        group: ubuntu
