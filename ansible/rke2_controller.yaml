@@ -42,3 +42,28 @@
         dest: /home/ubuntu/.kube/config
         state: link
         force: true
+
+- name: Install Helm
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Download Helm installation script
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+        dest: /tmp/get_helm.sh
+        mode: '0700'
+
+    - name: Install Helm
+      ansible.builtin.shell:
+        cmd: |
+          /tmp/get_helm.sh
+      changed_when: true
+
+    - name: Download helmfile binary
+      ansible.builtin.unarchive:
+        src: https://github.com/helmfile/helmfile/releases/download/v0.170.1/helmfile_0.170.1_linux_amd64.tar.gz
+        dest: /usr/local/bin/
+        mode: '0755'
+        remote_src: true
+        include:
+          - helmfile
