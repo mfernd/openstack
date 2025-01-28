@@ -45,7 +45,24 @@ module "controller" {
   your_ssh_key_pair_name = var.your_ssh_key_pair_name
   cloudinit_config = templatefile("${path.module}/assets/cloud-init.tftpl", {
     playbook_name = "ansible/rke2_controller.yaml",
-    token         = var.rke2_token
+    token         = var.rke2_token,
+    controller_ip = null,
+  })
+}
+
+module "nodes" {
+  count  = 3
+  source = "./modules/instance"
+
+  instance_name          = "node${count.index}"
+  compute_flavor_name    = "m1.medium"
+  networks               = [module.internal_net.id]
+  secgroups              = [module.secgroup0.name]
+  your_ssh_key_pair_name = var.your_ssh_key_pair_name
+  cloudinit_config = templatefile("${path.module}/assets/cloud-init.tftpl", {
+    playbook_name = "ansible/rke2_node.yaml",
+    token         = var.rke2_token,
+    controller_ip = module.controller.internal_ip,
   })
 }
 
@@ -61,7 +78,7 @@ output "networks" {
 output "instances" {
   value = [
     module.controller,
-    # module.nodes,
+    module.nodes,
   ]
 }
 

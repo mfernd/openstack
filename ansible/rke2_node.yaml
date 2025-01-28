@@ -1,0 +1,22 @@
+---
+- name: Install and start rke2
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Download rke2 installation script
+      ansible.builtin.get_url:
+        url: https://get.rke2.io
+        dest: /tmp/install_rke2.sh
+        mode: '0700'
+
+    - name: Install rke2 as agent
+      ansible.builtin.shell:
+        cmd: |
+          INSTALL_RKE2_CHANNEL="latest" INSTALL_RKE2_TYPE="agent" /tmp/install_rke2.sh
+      changed_when: true
+
+    - name: Start the rke2-agent service
+      ansible.builtin.service:
+        name: rke2-agent
+        enabled: true
+        state: started

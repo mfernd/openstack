@@ -7,12 +7,12 @@
       ansible.builtin.get_url:
         url: https://get.rke2.io
         dest: /tmp/install_rke2.sh
-        mode: '0755'
+        mode: '0700'
 
-    - name: Install rke2
+    - name: Install rke2 as server
       ansible.builtin.shell:
         cmd: |
-          INSTALL_RKE2_CHANNEL=latest /tmp/install_rke2.sh
+          INSTALL_RKE2_CHANNEL="latest" /tmp/install_rke2.sh
       changed_when: true
 
     - name: Start the rke2-server service
@@ -36,12 +36,13 @@
         owner: ubuntu
         group: ubuntu
 
-    - name: Create symlink for kubeconfig
-      ansible.builtin.file:
+    - name: Copy kubeconfig to ~/.kube/
+      ansible.builtin.copy:
         src: /etc/rancher/rke2/rke2.yaml
         dest: /home/ubuntu/.kube/config
-        state: link
-        force: true
+        owner: ubuntu
+        group: ubuntu
+        mode: '0600'
 
 - name: Install Helm
   hosts: localhost
