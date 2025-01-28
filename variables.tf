@@ -22,3 +22,9 @@ variable "rke2_token" {
   type        = string
   default     = "test"
 }
+
+variable "argocd_password" {
+  description = "ArgoCD password (needs to be at least 8 characters)"
+  type        = string
+  default     = "CHANGEME!"
+}

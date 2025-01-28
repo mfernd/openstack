@@ -38,9 +38,10 @@ module "controller" {
   is_public              = true
   your_ssh_key_pair_name = var.your_ssh_key_pair_name
   cloudinit_config = templatefile("${path.module}/assets/cloud-init.tftpl", {
-    playbook_name = "ansible/rke2_controller.yaml",
-    token         = var.rke2_token,
-    controller_ip = null,
+    playbook_name   = "ansible/rke2_controller.yaml",
+    token           = var.rke2_token,
+    controller_ip   = null,
+    argocd_password = var.argocd_password,
   })
 }
 
@@ -54,9 +55,10 @@ module "nodes" {
   secgroups              = [module.secgroup0.name]
   your_ssh_key_pair_name = var.your_ssh_key_pair_name
   cloudinit_config = templatefile("${path.module}/assets/cloud-init.tftpl", {
-    playbook_name = "ansible/rke2_node.yaml",
-    token         = var.rke2_token,
-    controller_ip = module.controller.internal_ip,
+    playbook_name   = "ansible/rke2_node.yaml",
+    token           = var.rke2_token,
+    controller_ip   = module.controller.internal_ip,
+    argocd_password = "",
   })
 }
 

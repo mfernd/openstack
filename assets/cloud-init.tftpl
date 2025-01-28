@@ -21,3 +21,4 @@ ansible:
   pull:
     url: https://github.com/mfernd/openstack.git
     playbook_name: ${playbook_name}
+    extra_vars: '{"argocd_password": "${argocd_password}"}'

@@ -16,10 +16,10 @@ variable "allow_all_for_internal" {
   description = "Allow all communication for the internal network"
   type = object({
     allow = bool
-    cidr    = string
+    cidr  = string
   })
   default = {
     allow = true
-    cidr    = "192.168.0.0/24"
+    cidr  = "192.168.0.0/24"
   }
 }

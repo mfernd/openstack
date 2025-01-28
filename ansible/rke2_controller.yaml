@@ -36,13 +36,14 @@
         owner: ubuntu
         group: ubuntu
 
+    # because ansible.builtin.copy was not working, I don't know why...
     - name: Copy kubeconfig to ~/.kube/
-      ansible.builtin.copy:
-        src: /etc/rancher/rke2/rke2.yaml
-        dest: /home/ubuntu/.kube/config
-        owner: ubuntu
-        group: ubuntu
-        mode: '0600'
+      ansible.builtin.shell:
+        cmd: |
+          sudo cp /etc/rancher/rke2/rke2.yaml /home/ubuntu/.kube/config
+          sudo chmod 0600 /home/ubuntu/.kube/config
+          sudo chown ubuntu:ubuntu /home/ubuntu/.kube/config
+      changed_when: true
 
 - name: Install k8s tools
   hosts: localhost
@@ -80,11 +81,41 @@
 
 - name: Install ArgoCD
   hosts: localhost
-  become: true
   tasks:
     - name: Apply ArgoCD manifests
       ansible.builtin.shell:
         cmd: |
           kubectl create namespace argocd
-          kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/refs/heads/master/manifests/ha/install.yaml
+          kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+      changed_when: true
+
+    - name: Download ArgoCD CLI
+      ansible.builtin.get_url:
+        url: https://github.com/argoproj/argo-cd/releases/download/v2.13.3/argocd-linux-amd64
+        dest: /usr/local/bin/argocd
+        mode: '0755'
+      become: true
+
+    - name: Login to ArgoCD
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          argocd --port-forward \
+                 --port-forward-namespace argocd \
+                 login \
+                 --username admin \
+                 --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d) \
+                 --insecure
+      changed_when: true
+
+    - name: Change the ArgoCD password
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          argocd --port-forward \
+                 --port-forward-namespace argocd \
+                 account update-password \
+                 --new-password "{{ argocd_password }}" \
+                 --current-password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
+          kubectl -n argocd delete secrets argocd-initial-admin-secret
       changed_when: true
