@@ -1,0 +1,24 @@
+---
+- name: Create a VM with a Floating IP on OpenStack
+  hosts: localhost
+  vars_files:
+    - vars/external_vars.yaml
+  vars:
+    vm_name: my-vm
+    image_name: Ubuntu-24.10
+    flavor_name: m1.small
+    security_group: default
+    floating_network: public
+    floating_ip: auto
+  tasks:
+    - name: Create a VM instance
+      openstack.cloud.server:
+        cloud: "{{ cloud_name }}"
+        state: present
+        name: "{{ vm_name }}"
+        image: "{{ image_name }}"
+        flavor: "{{ flavor_name }}"
+        # key_name: "{{ keypair_name }}"
+        security_groups:
+          - default
+      register: vm
