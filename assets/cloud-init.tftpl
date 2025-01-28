@@ -13,9 +13,7 @@ write_files:
     permissions: "0644"
     content: |
       token: "${token}"
-      %{if controller_ip != null && playbook_name == "ansible/rke2_node.yaml"}
-      server: "https://${controller_ip}:9345"
-      %{endif}
+      %{if controller_ip != null && playbook_name == "ansible/rke2_node.yaml"}server: "https://${controller_ip}:9345"%{endif}
 
 ansible:
   package_name: ansible-core

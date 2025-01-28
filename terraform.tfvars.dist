@@ -8,3 +8,4 @@ openstack_provider_config = {
 }
 
 your_ssh_key_pair_name = "<YOUR_SSH_KEY_PAIR_NAME>"
+rke2_token = "K102c7a86d737735cde6187238c8c76a7f20438741a9c45e8950cc4c97f67ffadd8::server:test"

@@ -1,16 +1,10 @@
 # INFRASTRUCTURE
 
-module "public_net" {
+module "network" {
   source    = "./modules/network"
-  name      = "public_net"
+  name      = "network"
   cidr      = "192.168.0.0/24"
   is_public = true
-}
-
-module "internal_net" {
-  source = "./modules/network"
-  name   = "internal_net"
-  cidr   = "192.168.1.0/24"
 }
 
 module "secgroup0" {
@@ -39,7 +33,7 @@ module "controller" {
 
   instance_name          = "controller"
   compute_flavor_name    = "m1.medium"
-  networks               = [module.public_net.id, module.internal_net.id]
+  networks               = [module.network.id]
   secgroups              = [module.secgroup0.name]
   is_public              = true
   your_ssh_key_pair_name = var.your_ssh_key_pair_name
@@ -56,7 +50,7 @@ module "nodes" {
 
   instance_name          = "node${count.index}"
   compute_flavor_name    = "m1.medium"
-  networks               = [module.internal_net.id]
+  networks               = [module.network.id]
   secgroups              = [module.secgroup0.name]
   your_ssh_key_pair_name = var.your_ssh_key_pair_name
   cloudinit_config = templatefile("${path.module}/assets/cloud-init.tftpl", {
@@ -70,8 +64,7 @@ module "nodes" {
 
 output "networks" {
   value = [
-    module.public_net,
-    module.internal_net,
+    module.network,
   ]
 }
 

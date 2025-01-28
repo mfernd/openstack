@@ -1,6 +1,5 @@
 resource "openstack_compute_instance_v2" "instance" {
   name            = var.instance_name
-  image_id        = data.openstack_images_image_v2.debian.id
   flavor_id       = data.openstack_compute_flavor_v2.small.id
   key_pair        = data.openstack_compute_keypair_v2.kp.name
   security_groups = var.secgroups
@@ -11,6 +10,15 @@ resource "openstack_compute_instance_v2" "instance" {
     content {
       uuid = network.value
     }
+  }
+
+  block_device {
+    uuid                  = data.openstack_images_image_v2.debian.id
+    source_type           = "image"
+    volume_size           = 20
+    boot_index            = 0
+    destination_type      = "volume"
+    delete_on_termination = true
   }
 }
 
