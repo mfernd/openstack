@@ -44,7 +44,7 @@
         group: ubuntu
         mode: '0600'
 
-- name: Install Helm
+- name: Install k8s tools
   hosts: localhost
   become: true
   tasks:
@@ -68,3 +68,23 @@
         remote_src: true
         include:
           - helmfile
+
+    - name: Download k9s binary
+      ansible.builtin.unarchive:
+        src: https://github.com/derailed/k9s/releases/download/v0.32.7/k9s_Linux_amd64.tar.gz
+        dest: /usr/local/bin/
+        mode: '0755'
+        remote_src: true
+        include:
+          - k9s
+
+- name: Install ArgoCD
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Apply ArgoCD manifests
+      ansible.builtin.shell:
+        cmd: |
+          kubectl create namespace argocd
+          kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/refs/heads/master/manifests/ha/install.yaml
+      changed_when: true
